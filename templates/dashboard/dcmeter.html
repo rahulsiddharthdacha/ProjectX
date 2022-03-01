@@ -1,0 +1,323 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/graph.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashheader.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+{% endblock head %}
+
+
+{% block body %}
+ 
+{% for m in messages %}
+{% if m %}
+<div class='alert alert-{{ m.tags }}'>
+
+    {{ m }}
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+<div class="main">
+  <div class="dashboard">
+      <h3>Dashboard</h3>
+  </div>
+  <div class="action-btns">
+      <a  href={% url 'dashbaord' %}><button class=" button-4">WMS Analysis</button></a>
+      <a   href='#'><button class="button-4">DC meter</button></a>
+  </div>
+
+  <div class="content">
+    <div class="rightbar">
+        <div class="graph">
+          <canvas id="chartcombo"></canvas>
+        </div>
+    </div>
+  </div>
+
+
+  <div class="content">
+    <div class="rightbar">
+        <div class="graph">
+          <canvas id="chartcombo1"></canvas>
+        </div>
+    </div>
+  </div>
+
+
+  <div class="content">
+    <div class="rightbar">
+        <div class="graph">
+          <canvas id="chartcombo2"></canvas>
+        </div>
+    </div>
+  </div>
+
+
+  <div class="content">
+    <div class="rightbar">
+        <div class="graph">
+          <canvas id="chartcombo3"></canvas>
+        </div>
+    </div>
+  </div>
+
+
+  <div class="content">
+    <div class="rightbar">
+        <div class="graph">
+          <canvas id="combo"></canvas>
+        </div>
+    </div>
+  </div>
+
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+
+  
+    const labels1 = [{% for h in dcm %} '{{ h.timestamp }}',{% endfor %}
+      ];
+    const data1 = {
+      labels: labels1,
+      datasets: [
+      {
+        label: 'Energy 1',
+        data: [{% for h in dcm %} '{{ h.DcEnergy1 }}',{% endfor %}],
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132,0.5)',
+        stack:'line',
+      },
+        {
+          label: 'Input Current 1',
+          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          data: [{% for h in dcm %} '{{ h.Inputcurrent1 }}',{% endfor %}],
+          stack: 'combined',
+          type: 'bar'
+        }
+      ]
+    };  
+    const config1 = {
+      type: 'line',
+      data: data1,
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Current 1 vs Energy 1',
+          }
+        },
+        scales: {
+          y: {
+            stacked: true
+          }
+        }
+      },
+    };
+  </script>
+  <script>
+    const chartcombo = new Chart(
+      document.getElementById('chartcombo'),
+      config1
+    );
+  </script>
+{% comment %} Two chart {% endcomment %}
+<script>
+
+  
+  const labels2 = [{% for h in dcm %} '{{ h.timestamp }}',{% endfor %}
+    ];
+  const data2 = {
+    labels: labels1,
+    datasets: [
+    {
+      label: 'Energy 2',
+      data: [{% for h in dcm %} '{{ h.DcEnergy2 }}',{% endfor %}],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132,0.5)',
+      stack:'line',
+    },
+      {
+        label: 'Input Current 2',
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        data: [{% for h in dcm %} '{{ h.Inputcurrent2 }}',{% endfor %}],
+        stack: 'combined',
+        type: 'bar'
+      }
+    ]
+  };  
+  const config2 = {
+    type: 'line',
+    data: data2,
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Current 2 vs Energy 2',
+        }
+      },
+      scales: {
+        y: {
+          stacked: true
+        }
+      }
+    },
+  };
+</script>
+
+
+<script>
+  const chartcombo2 = new Chart(
+    document.getElementById('chartcombo1'),
+    config2
+  );
+</script>
+
+
+{% comment %} 3rd chart {% endcomment %}
+<script>
+
+  
+  const labels3 = [{% for h in dcm %} '{{ h.timestamp }}',{% endfor %}
+    ];
+  const data3 = {
+    labels: labels1,
+    datasets: [
+    {
+      label: 'Energy 3',
+      data: [{% for h in dcm %} '{{ h.DcEnergy3 }}',{% endfor %}],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132,0.5)',
+      stack:'line',
+    },
+      {
+        label: 'Input Current 3',
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        data: [{% for h in dcm %} '{{ h.Inputcurrent3 }}',{% endfor %}],
+        stack: 'combined',
+        type: 'bar'
+      }
+    ]
+  };  
+  const config3 = {
+    type: 'line',
+    data: data3,
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Current 3 vs Energy 3',
+        }
+      },
+      scales: {
+        y: {
+          stacked: true
+        }
+      }
+    },
+  };
+</script>
+<script>
+  const chartcombo3 = new Chart(
+    document.getElementById('chartcombo2'),
+    config3
+  );
+</script>
+{% comment %} 4th chart {% endcomment %}
+<script>
+
+  
+  const labels4 = [{% for h in dcm %} '{{ h.timestamp }}',{% endfor %}
+    ];
+  const data4 = {
+    labels: labels1,
+    datasets: [
+    {
+      label: 'Energy 4',
+      data: [{% for h in dcm %} '{{ h.DcEnergy4 }}',{% endfor %}],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132,0.5)',
+      stack:'line',
+    },
+      {
+        label: 'Input Current 4',
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        data: [{% for h in dcm %} '{{ h.Inputcurrent4 }}',{% endfor %}],
+        stack: 'combined',
+        type: 'bar'
+      }
+    ]
+  };  
+  const config4 = {
+    type: 'line',
+    data: data4,
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Current 4 vs Energy 4',
+        }
+      },
+      scales: {
+        y: {
+          stacked: true
+        }
+      }
+    },
+  };
+</script>
+<script>
+  const chartcombo4 = new Chart(
+    document.getElementById('chartcombo3'),
+    config4
+  );
+</script>
+
+{% comment %} Voltage {% endcomment %}
+
+<script>
+  const labels = [{% for h in dcm %} '{{ h.timestamp }}',{% endfor %}
+  ];
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'Voltage',
+      borderColor: 'rgb(75, 192, 192)',
+      backgroundColor: 'rgba(75, 192, 192, 0.5)',
+      data: [{% for h in dcm %} '{{ h.DcBusVoltage }}',{% endfor %}],
+    },
+    ]
+  };
+  const config = {
+    type: 'line',
+    data: data,
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Voltage',
+        }
+      },
+    },
+  };
+</script>
+<script>
+  const myChart = new Chart(
+    document.getElementById('combo'),
+    config
+  );
+</script>
+
+{% endblock body %}
+ 

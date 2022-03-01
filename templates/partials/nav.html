@@ -1,0 +1,39 @@
+<!-- Image and text -->
+{% load static %}
+<header>
+  <!-- <img class="logo img" src="img/logo.png" alt="logo"> -->
+  {% if user.is_authenticated %}
+  <img style="max-height: 100px" src="https://www.windstream.tech/wp-content/uploads/2019/10/Logo.png" alt="WindStream Energy Technologies">
+  <a href={% url 'home' %} class="title">Wind Stream</a>
+        <nav>
+            <ul class="nav-links">
+                <div class="nav-links">
+                    <form method='POST'>
+                        {% csrf_token %}
+                        <a href={% url 'logout' %} class="logout">Logout</a>
+                        </form>
+                    
+                </div>
+            </ul>
+            <div class="nav-links">
+                <h3>Name</h3>
+                <h5>{{ user.username }}</h5>
+            </div>
+           
+            <div class="photo">
+                <img src={% static 'images/user.png' %} alt="">
+            </div>
+        </nav>
+{% else %}
+
+<img style="max-height: 100px" src="https://www.windstream.tech/wp-content/uploads/2019/10/Logo.png" alt="WindStream Energy Technologies">
+  <a href={% url 'home' %} class="title">Wind Stream</a>
+  <nav>
+      <ul class="nav-links">
+          <li><a href={% url 'home' %}>Home</a></li>
+          <li><a href={% url 'admin' %}>Admin</a></li>
+      </ul>
+  </nav>
+  {% endif %}
+
+</header>

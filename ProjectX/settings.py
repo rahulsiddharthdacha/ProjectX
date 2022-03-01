@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Home.apps.HomeConfig',
+    'dashboard.apps.DashboardConfig',
+    'Users.apps.UsersConfig',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +57,7 @@ ROOT_URLCONF = 'ProjectX.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,8 +69,15 @@ TEMPLATES = [
         },
     },
 ]
+STATIC_URL= 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 WSGI_APPLICATION = 'ProjectX.wsgi.application'
+
 
 
 # Database
@@ -99,6 +108,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+#logins and logouts
+
+LOGIN_REDIRECT_URL = 'dashbaord'
+LOGOUT_REDIRECT_URL = 'home'
+
+LOGIN_URL='login'
 
 
 # Internationalization

@@ -1,0 +1,166 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/graph.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashheader.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+{% endblock head %}
+
+
+{% block body %}
+ 
+{% for m in messages %}
+{% if m %}
+<div class='sh'>
+    {{ m }}
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+<div class="main">
+  <div class="dashboard">
+      <h3>Dashboard</h3>
+  </div>
+  <div class="action-btns">
+      <a  href='#'><button class=" button-4">WMS Analysis</button></a>
+      <a href={% url 'dashboard1' %}><button class="button-4" >DC meter</button></a>
+  </div>
+  <div class="content">
+      <div class="rightbar">
+          <div class="graph">
+            <canvas id="myChart"></canvas>
+          </div>
+      </div>
+  </div>
+
+
+
+  <div class="content">
+    <div class="rightbar">
+        <div class="graph">
+          <canvas id="chartcombo"></canvas>
+        </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<script>
+    const labels = [{% for h in home %} '{{ h.timestamp }}',{% endfor %}
+    ];
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: 'Solar Irradation',
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        data: [{% for h in home %} '{{ h.solar_irradation }}',{% endfor %}],
+        tension: 0.2,
+      },
+      
+      {
+        label: 'Wind Speed',
+        data: [{% for h in home %} '{{ h.wind_speed }}',{% endfor %}],
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132,0.5)',
+        tension: 0.2,
+      },
+      
+      {
+        label: 'Module Tempartarure',
+        data: [{% for h in home %} '{{ h.module_temp }}',{% endfor %}],
+        borderColor: 'rgb(255,223,0)',
+        backgroundColor: 'rgba(255,223,0,0.5)',
+        tension: 0.2,
+      },
+      {
+        label: 'Ambient Tempartarure',
+        data: [{% for h in home %} '{{ h.ambient_temp }}',{% endfor %}],
+        borderColor: 'rgb(0,0,255)',
+        backgroundColor: 'rgba(0, 0, 255,0.5)',
+        stack:'line',
+        tension: 0.2,
+      }
+      ]
+    };
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'All Data Analysis',
+          }
+        },
+      },
+    };
+  </script>
+  <script>
+    const myChart = new Chart(
+      document.getElementById('myChart'),
+      config
+    );
+  </script>
+
+{% comment %} ----------- {% endcomment %}
+<script>
+
+  
+  const labels1 = [{% for h in home %} '{{ h.timestamp }}',{% endfor %}
+    ];
+  const data1 = {
+    labels: labels1,
+    datasets: [
+    {
+      label: 'Ambient Tempartarure',
+      data: [{% for h in home %} '{{ h.ambient_temp }}',{% endfor %}],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132,0.5)',
+      stack:'line',
+    },
+      {
+        label: 'Solar Irradation',
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        data: [{% for h in home %} '{{ h.solar_irradation }}',{% endfor %}],
+        stack: 'combined',
+        type: 'bar'
+      }
+    ]
+  };  
+  const config1 = {
+    type: 'line',
+    data: data1,
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Ambient Temperature Vs Solar Irradation',
+        }
+      },
+      scales: {
+        y: {
+          stacked: true
+        }
+      }
+    },
+  };
+</script>
+<script>
+  const chartcombo = new Chart(
+    document.getElementById('chartcombo'),
+    config1
+  );
+</script>
+{% endblock body %}
+ 
